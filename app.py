@@ -25,6 +25,8 @@ st.header("Insira as Odds das Casas de Apostas:")
 odd_casa = st.number_input("Odd da Casa", min_value=1.01, step=0.01)
 odd_empate = st.number_input("Odd do Empate", min_value=1.01, step=0.01)
 odd_visitante = st.number_input("Odd do Visitante", min_value=1.01, step=0.01)
+odd_dnb_casa = st.number_input("Odd DNB (Casa)", min_value=1.01, step=0.01)
+odd_1x = st.number_input("Odd 1X (Casa ou Empate)", min_value=1.01, step=0.01)
 
 # Entradas para o desempenho do time da casa e do visitante
 st.header("Desempenho nos últimos 10 jogos em casa e fora:")
@@ -77,14 +79,14 @@ st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
 # Avaliação de +EV para os mercados 1x2, DNB e 1X
 avaliacao_mercados = {
     "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)"],
-    "Odd Calculada": [odd_calculada_casa, odd_calculada_empate, odd_calculada_fora, odd_calculada_dnb, odd_calculada_1x],
-    "Odd Informada": [odd_casa, odd_empate, odd_visitante, odd_casa, odd_casa],  # Para DNB e 1X, usamos a odd da casa
+    "Odd Calculada": [round(odd_calculada_casa, 2), round(odd_calculada_empate, 2), round(odd_calculada_fora, 2), round(odd_calculada_dnb, 2), round(odd_calculada_1x, 2)],
+    "Odd Informada": [odd_casa, odd_empate, odd_visitante, odd_dnb_casa, odd_1x],
     "Aposta +EV": [
         avaliar_ev(odd_casa, odd_calculada_casa),
         avaliar_ev(odd_empate, odd_calculada_empate),
         avaliar_ev(odd_visitante, odd_calculada_fora),
-        avaliar_ev(odd_casa, odd_calculada_dnb),
-        avaliar_ev(odd_casa, odd_calculada_1x)
+        avaliar_ev(odd_dnb_casa, odd_calculada_dnb),
+        avaliar_ev(odd_1x, odd_calculada_1x)
     ]
 }
 
