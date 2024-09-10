@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 # Função para calcular a probabilidade com base nas vitórias, empates e derrotas
 def calcular_probabilidade(vitorias, empates, derrotas):
@@ -57,18 +58,37 @@ odd_calculada_casa = calcular_odd_decimal(prob_total_casa)
 odd_calculada_empate = calcular_odd_decimal(prob_total_empate)
 odd_calculada_fora = calcular_odd_decimal(prob_total_fora)
 
+# Cálculo dos mercados especiais
+prob_dnb = prob_total_casa  # DNB (Draw No Bet) considera apenas a vitória do time da casa
+prob_1x = prob_total_casa + prob_total_empate  # Probabilidade de 1X (Casa ou Empate)
+
+# Cálculo das odds para os mercados especiais
+odd_calculada_dnb = calcular_odd_decimal(prob_dnb)
+odd_calculada_1x = calcular_odd_decimal(prob_1x)
+
 # Exibição dos resultados
 st.header("Odds Calculadas com base nas Probabilidades:")
 st.write(f"Odd da Casa: {odd_calculada_casa:.2f}")
 st.write(f"Odd do Empate: {odd_calculada_empate:.2f}")
 st.write(f"Odd do Visitante: {odd_calculada_fora:.2f}")
+st.write(f"Odd DNB (Casa): {odd_calculada_dnb:.2f}")
+st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
 
-# Avaliação de +EV
-st.header("Avaliação de Valor:")
-resultado_casa = avaliar_ev(odd_casa, odd_calculada_casa)
-resultado_empate = avaliar_ev(odd_empate, odd_calculada_empate)
-resultado_fora = avaliar_ev(odd_visitante, odd_calculada_fora)
+# Avaliação de +EV para os mercados 1x2, DNB e 1X
+avaliacao_mercados = {
+    "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)"],
+    "Odd Calculada": [odd_calculada_casa, odd_calculada_empate, odd_calculada_fora, odd_calculada_dnb, odd_calculada_1x],
+    "Odd Informada": [odd_casa, odd_empate, odd_visitante, odd_casa, odd_casa],  # Para DNB e 1X, usamos a odd da casa
+    "Aposta +EV": [
+        avaliar_ev(odd_casa, odd_calculada_casa),
+        avaliar_ev(odd_empate, odd_calculada_empate),
+        avaliar_ev(odd_visitante, odd_calculada_fora),
+        avaliar_ev(odd_casa, odd_calculada_dnb),
+        avaliar_ev(odd_casa, odd_calculada_1x)
+    ]
+}
 
-st.write(f"Aposta na Casa: {resultado_casa}")
-st.write(f"Aposta no Empate: {resultado_empate}")
-st.write(f"Aposta no Visitante: {resultado_fora}")
+# Exibir a tabela de avaliação de valor
+df_avaliacao = pd.DataFrame(avaliacao_mercados)
+st.header("Avaliação de Valor dos Mercados:")
+st.table(df_avaliacao)
