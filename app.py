@@ -26,10 +26,7 @@ odd_empate = st.number_input("Odd do Empate", min_value=1.01, step=0.01)
 odd_visitante = st.number_input("Odd do Visitante", min_value=1.01, step=0.01)
 
 # Entradas para o desempenho do time da casa e do visitante
-st.header("Desempenho nos últimos 10 jogos:")
-vitorias_casa_fora = st.number_input("Vitórias (Casa/Fora)", min_value=0, max_value=10, step=1)
-empates_casa_fora = st.number_input("Empates (Casa/Fora)", min_value=0, max_value=10, step=1)
-derrotas_casa_fora = st.number_input("Derrotas (Casa/Fora)", min_value=0, max_value=10, step=1)
+st.header("Desempenho nos últimos 10 jogos em casa e fora:")
 
 vitorias_casa_casa = st.number_input("Vitórias (Casa/Casa)", min_value=0, max_value=10, step=1)
 empates_casa_casa = st.number_input("Empates (Casa/Casa)", min_value=0, max_value=10, step=1)
@@ -46,15 +43,14 @@ empates_h2h = st.number_input("Empates", min_value=0, max_value=5, step=1)
 derrotas_h2h = st.number_input("Vitórias do Visitante", min_value=0, max_value=5, step=1)
 
 # Cálculos das probabilidades médias
-prob_casa_fora, prob_empate_fora, prob_derrota_fora = calcular_probabilidade(vitorias_casa_fora, empates_casa_fora, derrotas_casa_fora)
 prob_casa_casa, prob_empate_casa, prob_derrota_casa = calcular_probabilidade(vitorias_casa_casa, empates_casa_casa, derrotas_casa_casa)
 prob_fora_fora, prob_empate_fora_fora, prob_derrota_fora_fora = calcular_probabilidade(vitorias_fora_fora, empates_fora_fora, derrotas_fora_fora)
 prob_h2h_casa, prob_h2h_empate, prob_h2h_fora = calcular_probabilidade(vitorias_h2h, empates_h2h, derrotas_h2h)
 
 # Média ponderada das probabilidades
-prob_total_casa = (prob_casa_fora + prob_casa_casa + prob_h2h_casa) / 3
-prob_total_empate = (prob_empate_fora + prob_empate_casa + prob_h2h_empate) / 3
-prob_total_fora = (prob_derrota_fora + prob_derrota_casa + prob_h2h_fora) / 3
+prob_total_casa = (prob_casa_casa + prob_h2h_casa) / 2
+prob_total_empate = (prob_empate_casa + prob_h2h_empate) / 2
+prob_total_fora = (prob_derrota_casa + prob_h2h_fora) / 2
 
 # Cálculo das odds decimais
 odd_calculada_casa = calcular_odd_decimal(prob_total_casa)
