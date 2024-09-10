@@ -13,9 +13,15 @@ def calcular_probabilidade(vitorias, empates, derrotas):
 def calcular_odd_decimal(probabilidade):
     return 1 / probabilidade if probabilidade > 0 else float('inf')
 
-# Função para determinar se é uma aposta +EV
+# Função para determinar se é uma aposta +EV no mercado 1X2
 def avaliar_ev(odd_input, odd_calculada):
     return "Aposta +EV" if odd_calculada < odd_input else "Não Apostar -EV"
+
+# Função para calcular +EV no mercado DNB
+def avaliar_ev_dnb(odd_dnb_input, prob_vitoria, prob_empate, prob_derrota):
+    # Fórmula ajustada para DNB (considerando devolução em caso de empate)
+    ev_dnb = (prob_vitoria * (odd_dnb_input - 1)) + (prob_empate * 0) + (prob_derrota * -1)
+    return "Aposta +EV" if ev_dnb > 0 else "Não Apostar -EV"
 
 # Interface com o Streamlit
 st.title("Calculadora de Aposta de Valor (+EV)")
@@ -29,13 +35,13 @@ odd_dnb_casa = st.number_input("Odd DNB (Casa)", min_value=1.01, step=0.01)
 odd_1x = st.number_input("Odd 1X (Casa ou Empate)", min_value=1.01, step=0.01)
 
 # Entradas para o desempenho do time da casa e do visitante
-st.header("Desempenho nos últimos 10 jogos casa")
+st.header("Desempenho nos últimos 10 jogos casa:")
 
 vitorias_casa_casa = st.number_input("Vitórias (Casa/Casa)", min_value=0, max_value=10, step=1)
 empates_casa_casa = st.number_input("Empates (Casa/Casa)", min_value=0, max_value=10, step=1)
 derrotas_casa_casa = st.number_input("Derrotas (Casa/Casa)", min_value=0, max_value=10, step=1)
 
-st.header("Desempenho nos últimos 10 jogos fora:") 
+st.header("Desempenho nos últimos 10 jogos fora:")
 
 vitorias_fora_fora = st.number_input("Vitórias (Fora/Fora)", min_value=0, max_value=10, step=1)
 empates_fora_fora = st.number_input("Empates (Fora/Fora)", min_value=0, max_value=10, step=1)
@@ -87,7 +93,7 @@ avaliacao_mercados = {
         avaliar_ev(odd_casa, odd_calculada_casa),
         avaliar_ev(odd_empate, odd_calculada_empate),
         avaliar_ev(odd_visitante, odd_calculada_fora),
-        avaliar_ev(odd_dnb_casa, odd_calculada_dnb),
+        avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora),
         avaliar_ev(odd_1x, odd_calculada_1x)
     ]
 }
