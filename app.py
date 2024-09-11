@@ -19,7 +19,6 @@ def avaliar_ev(odd_input, odd_calculada):
 
 # Função para calcular +EV no mercado DNB
 def avaliar_ev_dnb(odd_dnb_input, prob_vitoria, prob_empate, prob_derrota):
-    # Fórmula ajustada para DNB (considerando devolução em caso de empate)
     ev_dnb = (prob_vitoria * (odd_dnb_input - 1)) + (prob_empate * 0) + (prob_derrota * -1)
     return "+EV" if ev_dnb > 0 else "-EV"
 
@@ -37,16 +36,15 @@ odd_empate = st.number_input("Odd do Empate", min_value=1.01, step=0.01)
 odd_visitante = st.number_input("Odd do Visitante", min_value=1.01, step=0.01)
 odd_dnb_casa = st.number_input("Odd DNB (Casa)", min_value=1.01, step=0.01)
 odd_1x = st.number_input("Odd 1X (Casa ou Empate)", min_value=1.01, step=0.01)
+odd_x2 = st.number_input("Odd X2 (Empate ou Vitória Visitante)", min_value=1.01, step=0.01)
 
 # Entradas para o desempenho do time da casa e do visitante
 st.header("Desempenho nos últimos 10 jogos casa:")
-
 vitorias_casa_casa = st.number_input("Vitórias (Casa/Casa)", min_value=0, max_value=10, step=1)
 empates_casa_casa = st.number_input("Empates (Casa/Casa)", min_value=0, max_value=10, step=1)
 derrotas_casa_casa = st.number_input("Derrotas (Casa/Casa)", min_value=0, max_value=10, step=1)
 
 st.header("Desempenho nos últimos 10 jogos fora:")
-
 vitorias_fora_fora = st.number_input("Vitórias (Fora/Fora)", min_value=0, max_value=10, step=1)
 empates_fora_fora = st.number_input("Empates (Fora/Fora)", min_value=0, max_value=10, step=1)
 derrotas_fora_fora = st.number_input("Derrotas (Fora/Fora)", min_value=0, max_value=10, step=1)
@@ -75,10 +73,12 @@ odd_calculada_fora = calcular_odd_decimal(prob_total_fora)
 # Cálculo dos mercados especiais
 prob_dnb = prob_total_casa  # DNB (Draw No Bet) considera apenas a vitória do time da casa
 prob_1x = prob_total_casa + prob_total_empate  # Probabilidade de 1X (Casa ou Empate)
+prob_x2 = prob_total_fora + prob_total_empate  # Probabilidade de X2 (Empate ou Vitória Visitante)
 
 # Cálculo das odds para os mercados especiais
 odd_calculada_dnb = calcular_odd_decimal(prob_dnb)
 odd_calculada_1x = calcular_odd_decimal(prob_1x)
+odd_calculada_x2 = calcular_odd_decimal(prob_x2)
 
 # Exibição dos resultados
 st.header("Odds Calculadas com base nas Probabilidades:")
@@ -87,22 +87,25 @@ st.write(f"Odd do Empate: {odd_calculada_empate:.2f}")
 st.write(f"Odd do Visitante: {odd_calculada_fora:.2f}")
 st.write(f"Odd DNB (Casa): {odd_calculada_dnb:.2f}")
 st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
+st.write(f"Odd X2 (Empate ou Vitória Visitante): {odd_calculada_x2:.2f}")
 
-# Avaliação de +EV para os mercados 1x2, DNB e 1X com cálculo percentual
+# Avaliação de +EV para os mercados 1x2, DNB, 1X e X2 com cálculo percentual
 avaliacao_mercados = {
-    "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)"],
-    "Odd Calculada": [f"{odd_calculada_casa:.2f}", f"{odd_calculada_empate:.2f}", f"{odd_calculada_fora:.2f}", f"{odd_calculada_dnb:.2f}", f"{odd_calculada_1x:.2f}"],
-    "Odd Informada": [f"{odd_casa:.2f}", f"{odd_empate:.2f}", f"{odd_visitante:.2f}", f"{odd_dnb_casa:.2f}", f"{odd_1x:.2f}"],
+    "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)", "X2 (Empate ou Vitória Visitante)"],
+    "Odd Calculada": [f"{odd_calculada_casa:.2f}", f"{odd_calculada_empate:.2f}", f"{odd_calculada_fora:.2f}", f"{odd_calculada_dnb:.2f}", f"{odd_calculada_1x:.2f}", f"{odd_calculada_x2:.2f}"],
+    "Odd Informada": [f"{odd_casa:.2f}", f"{odd_empate:.2f}", f"{odd_visitante:.2f}", f"{odd_dnb_casa:.2f}", f"{odd_1x:.2f}", f"{odd_x2:.2f}"],
     "Aposta +EV": [
         f"{avaliar_ev(odd_casa, odd_calculada_casa)} ({calcular_percentual(odd_casa, odd_calculada_casa):.2f}%)",
         f"{avaliar_ev(odd_empate, odd_calculada_empate)} ({calcular_percentual(odd_empate, odd_calculada_empate):.2f}%)",
         f"{avaliar_ev(odd_visitante, odd_calculada_fora)} ({calcular_percentual(odd_visitante, odd_calculada_fora):.2f}%)",
         f"{avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora)} ({calcular_percentual(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
-        f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual(odd_1x, odd_calculada_1x):.2f}%)"
+        f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual(odd_1x, odd_calculada_1x):.2f}%)",
+        f"{avaliar_ev(odd_x2, odd_calculada_x2)} ({calcular_percentual(odd_x2, odd_calculada_x2):.2f}%)"
     ]
 }
 
-# Exibir a tabela de avaliação de valor
 df_avaliacao = pd.DataFrame(avaliacao_mercados)
-st.header("Avaliação de Valor dos Mercados:")
-st.table(df_avaliacao)
+
+st.header("Avaliação de Apostas:")
+st.dataframe(df_avaliacao)
+
