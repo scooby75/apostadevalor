@@ -89,18 +89,25 @@ st.write(f"Odd DNB (Casa): {odd_calculada_dnb:.2f}")
 st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
 st.write(f"Odd X2 (Empate ou Vitória Visitante): {odd_calculada_x2:.2f}")
 
-# Avaliação de +EV para os mercados 1x2, DNB, 1X e X2 com cálculo percentual
+# Função para calcular o percentual +EV
+def calcular_percentual_ev(odd_informada, odd_calculada):
+    if odd_calculada > 1:
+        return ((odd_informada - 1) / (odd_calculada - 1)) * 100 - 100
+    else:
+        return 0
+
+# Avaliação de +EV para os mercados 1x2, DNB, 1X e X2 com cálculo percentual correto de +EV
 avaliacao_mercados = {
     "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)", "X2 (Empate ou Vitória Visitante)"],
     "Odd Calculada": [f"{odd_calculada_casa:.2f}", f"{odd_calculada_empate:.2f}", f"{odd_calculada_fora:.2f}", f"{odd_calculada_dnb:.2f}", f"{odd_calculada_1x:.2f}", f"{odd_calculada_x2:.2f}"],
     "Odd Informada": [f"{odd_casa:.2f}", f"{odd_empate:.2f}", f"{odd_visitante:.2f}", f"{odd_dnb_casa:.2f}", f"{odd_1x:.2f}", f"{odd_x2:.2f}"],
     "Aposta +EV": [
-        f"{avaliar_ev(odd_casa, odd_calculada_casa)} ({calcular_percentual(odd_casa, odd_calculada_casa):.2f}%)",
-        f"{avaliar_ev(odd_empate, odd_calculada_empate)} ({calcular_percentual(odd_empate, odd_calculada_empate):.2f}%)",
-        f"{avaliar_ev(odd_visitante, odd_calculada_fora)} ({calcular_percentual(odd_visitante, odd_calculada_fora):.2f}%)",
-        f"{avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora)} ({calcular_percentual(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
-        f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual(odd_1x, odd_calculada_1x):.2f}%)",
-        f"{avaliar_ev(odd_x2, odd_calculada_x2)} ({calcular_percentual(odd_x2, odd_calculada_x2):.2f}%)"
+        f"{avaliar_ev(odd_casa, odd_calculada_casa)} ({calcular_percentual_ev(odd_casa, odd_calculada_casa):.2f}%)",
+        f"{avaliar_ev(odd_empate, odd_calculada_empate)} ({calcular_percentual_ev(odd_empate, odd_calculada_empate):.2f}%)",
+        f"{avaliar_ev(odd_visitante, odd_calculada_fora)} ({calcular_percentual_ev(odd_visitante, odd_calculada_fora):.2f}%)",
+        f"{avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora)} ({calcular_percentual_ev(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
+        f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual_ev(odd_1x, odd_calculada_1x):.2f}%)",
+        f"{avaliar_ev(odd_x2, odd_calculada_x2)} ({calcular_percentual_ev(odd_x2, odd_calculada_x2):.2f}%)"
     ]
 }
 
@@ -108,4 +115,5 @@ df_avaliacao = pd.DataFrame(avaliacao_mercados)
 
 st.header("Avaliação de Apostas:")
 st.dataframe(df_avaliacao)
+
 
