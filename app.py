@@ -15,7 +15,7 @@ def calcular_odd_decimal(probabilidade):
 
 # Função para determinar se é uma aposta +EV no mercado 1X2
 def avaliar_ev(odd_input, odd_calculada):
-    return "Aposta +EV" if odd_calculada < odd_input else "Não Apostar -EV"
+    return "+EV" if odd_calculada < odd_input else "-EV"
 
 # Função para calcular +EV no mercado DNB
 def avaliar_ev_dnb(odd_dnb_input, prob_vitoria, prob_empate, prob_derrota):
