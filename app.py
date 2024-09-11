@@ -23,6 +23,10 @@ def avaliar_ev_dnb(odd_dnb_input, prob_vitoria, prob_empate, prob_derrota):
     ev_dnb = (prob_vitoria * (odd_dnb_input - 1)) + (prob_empate * 0) + (prob_derrota * -1)
     return "+EV" if ev_dnb > 0 else "-EV"
 
+# Função para calcular o percentual
+def calcular_percentual(odd_informada, odd_calculada):
+    return (odd_informada / odd_calculada) * 100 if odd_calculada > 0 else float('inf')
+
 # Interface com o Streamlit
 st.title("Calculadora de Aposta de Valor (+EV)")
 
@@ -84,17 +88,17 @@ st.write(f"Odd do Visitante: {odd_calculada_fora:.2f}")
 st.write(f"Odd DNB (Casa): {odd_calculada_dnb:.2f}")
 st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
 
-# Avaliação de +EV para os mercados 1x2, DNB e 1X
+# Avaliação de +EV para os mercados 1x2, DNB e 1X com cálculo percentual
 avaliacao_mercados = {
     "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)"],
     "Odd Calculada": [f"{odd_calculada_casa:.2f}", f"{odd_calculada_empate:.2f}", f"{odd_calculada_fora:.2f}", f"{odd_calculada_dnb:.2f}", f"{odd_calculada_1x:.2f}"],
     "Odd Informada": [f"{odd_casa:.2f}", f"{odd_empate:.2f}", f"{odd_visitante:.2f}", f"{odd_dnb_casa:.2f}", f"{odd_1x:.2f}"],
     "Aposta +EV": [
-        avaliar_ev(odd_casa, odd_calculada_casa),
-        avaliar_ev(odd_empate, odd_calculada_empate),
-        avaliar_ev(odd_visitante, odd_calculada_fora),
-        avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora),
-        avaliar_ev(odd_1x, odd_calculada_1x)
+        f"{avaliar_ev(odd_casa, odd_calculada_casa)} ({calcular_percentual(odd_casa, odd_calculada_casa):.2f}%)",
+        f"{avaliar_ev(odd_empate, odd_calculada_empate)} ({calcular_percentual(odd_empate, odd_calculada_empate):.2f}%)",
+        f"{avaliar_ev(odd_visitante, odd_calculada_fora)} ({calcular_percentual(odd_visitante, odd_calculada_fora):.2f}%)",
+        f"{avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora)} ({calcular_percentual(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
+        f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual(odd_1x, odd_calculada_1x):.2f}%)"
     ]
 }
 
