@@ -21,7 +21,7 @@ def avaliar_ev(odd_input, odd_calculada):
 def avaliar_ev_dnb(odd_dnb_input, prob_vitoria, prob_empate, prob_derrota):
     # Fórmula ajustada para DNB (considerando devolução em caso de empate)
     ev_dnb = (prob_vitoria * (odd_dnb_input - 1)) + (prob_empate * 0) + (prob_derrota * -1)
-    return "Aposta +EV" if ev_dnb > 0 else "Não Apostar -EV"
+    return "+EV" if ev_dnb > 0 else "-EV"
 
 # Interface com o Streamlit
 st.title("Calculadora de Aposta de Valor (+EV)")
