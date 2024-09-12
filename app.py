@@ -89,12 +89,13 @@ st.write(f"Odd DNB (Casa): {odd_calculada_dnb:.2f}")
 st.write(f"Odd 1X (Casa ou Empate): {odd_calculada_1x:.2f}")
 st.write(f"Odd X2 (Empate ou Vitória Visitante): {odd_calculada_x2:.2f}")
 
-# Função para calcular o percentual +EV
+# Função para calcular o percentual +EV corrigida
 def calcular_percentual_ev(odd_informada, odd_calculada):
     if odd_calculada > 1:
-        return ((odd_calculada - 1) / (odd_informada - 1)) * 100 - 100
+        return ((odd_calculada - 1) / (odd_informada - 1)) * 100
     else:
         return 0
+
 
 # Avaliação de +EV para os mercados 1x2, DNB, 1X e X2 com cálculo percentual correto de +EV
 avaliacao_mercados = {
