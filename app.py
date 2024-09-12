@@ -92,7 +92,7 @@ st.write(f"Odd X2 (Empate ou Vitória Visitante): {odd_calculada_x2:.2f}")
 # Função para calcular o percentual +EV
 def calcular_percentual_ev(odd_informada, odd_calculada):
     if odd_calculada > 1:
-        return ((odd_informada - 1) / (odd_calculada - 1)) * 100 - 100
+        return ((odd_calculada - 1) / (odd_informada - 1)) * 100 - 100
     else:
         return 0
 
