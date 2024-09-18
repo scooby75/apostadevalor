@@ -39,15 +39,15 @@ odd_1x = st.number_input("Odd 1X (Casa ou Empate)", min_value=1.01, step=0.01)
 odd_x2 = st.number_input("Odd X2 (Empate ou Vitória Visitante)", min_value=1.01, step=0.01)
 
 # Entradas para o desempenho do time da casa e do visitante
-st.header("Desempenho nos últimos 10 jogos casa:")
-vitorias_casa_casa = st.number_input("Vitórias (Casa/Casa)", min_value=0, max_value=10, step=1)
-empates_casa_casa = st.number_input("Empates (Casa/Casa)", min_value=0, max_value=10, step=1)
-derrotas_casa_casa = st.number_input("Derrotas (Casa/Casa)", min_value=0, max_value=10, step=1)
+st.header("Desempenho nos últimos 5 jogos casa:")
+vitorias_casa_casa = st.number_input("Vitórias (Casa/Casa)", min_value=0, max_value=5, step=1)
+empates_casa_casa = st.number_input("Empates (Casa/Casa)", min_value=0, max_value=5, step=1)
+derrotas_casa_casa = st.number_input("Derrotas (Casa/Casa)", min_value=0, max_value=5, step=1)
 
-st.header("Desempenho nos últimos 10 jogos fora:")
-vitorias_fora_fora = st.number_input("Vitórias (Fora/Fora)", min_value=0, max_value=10, step=1)
-empates_fora_fora = st.number_input("Empates (Fora/Fora)", min_value=0, max_value=10, step=1)
-derrotas_fora_fora = st.number_input("Derrotas (Fora/Fora)", min_value=0, max_value=10, step=1)
+st.header("Desempenho nos últimos 5 jogos fora:")
+vitorias_fora_fora = st.number_input("Vitórias (Fora/Fora)", min_value=0, max_value=5, step=1)
+empates_fora_fora = st.number_input("Empates (Fora/Fora)", min_value=0, max_value=5, step=1)
+derrotas_fora_fora = st.number_input("Derrotas (Fora/Fora)", min_value=0, max_value=5, step=1)
 
 # H2H dos últimos 5 jogos entre as equipes
 st.header("Últimos 5 jogos entre as equipes (H2H):")
@@ -96,8 +96,6 @@ def calcular_percentual_ev(odd_informada, odd_calculada):
     else:
         return 0
 
-
-
 # Avaliação de +EV para os mercados 1x2, DNB, 1X e X2 com cálculo percentual correto de +EV
 avaliacao_mercados = {
     "Mercado": ["1x2 Casa", "1x2 Empate", "1x2 Visitante", "DNB Casa", "1X (Casa ou Empate)", "X2 (Empate ou Vitória Visitante)"],
@@ -109,13 +107,10 @@ avaliacao_mercados = {
         f"{avaliar_ev(odd_visitante, odd_calculada_fora)} ({calcular_percentual_ev(odd_visitante, odd_calculada_fora):.2f}%)",
         f"{avaliar_ev_dnb(odd_dnb_casa, prob_total_casa, prob_total_empate, prob_total_fora)} ({calcular_percentual_ev(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
         f"{avaliar_ev(odd_1x, odd_calculada_1x)} ({calcular_percentual_ev(odd_1x, odd_calculada_1x):.2f}%)",
-        f"{avaliar_ev(odd_x2, odd_calculada_x2)} ({calcular_percentual_ev(odd_x2, odd_calculada_x2):.2f}%)"
+        f"{avaliar_ev(odd_x2, odd_calculada_x2)} ({calcular_percentual_ev(odd_x2, odd_calculada_x2):.2f}%)",
     ]
 }
 
-df_avaliacao = pd.DataFrame(avaliacao_mercados)
-
-st.header("Avaliação de Apostas:")
-st.dataframe(df_avaliacao)
-
-
+# Exibição dos resultados de +EV
+st.header("Avaliação de +EV (Expected Value):")
+st.write(pd.DataFrame(avaliacao_mercados))
