@@ -102,7 +102,7 @@ avaliacao_mercados = {
     "Odd Calculada": [f"{odd_calculada_casa:.2f}", f"{odd_calculada_empate:.2f}", f"{odd_calculada_fora:.2f}", f"{odd_calculada_dnb:.2f}", f"{odd_calculada_1x:.2f}", f"{odd_calculada_x2:.2f}"],
     "Odd Informada": [f"{odd_casa:.2f}", f"{odd_empate:.2f}", f"{odd_visitante:.2f}", f"{odd_dnb_casa:.2f}", f"{odd_1x:.2f}", f"{odd_x2:.2f}"],
     "Valor Esperado": [
-        f"({calcular_percentual_ev(odd_casa, odd_calculada_casa):.2f}%)",
+        f"{calcular_percentual_ev(odd_casa, odd_calculada_casa):.2f}%",
         f"({calcular_percentual_ev(odd_empate, odd_calculada_empate):.2f}%)",
         f"({calcular_percentual_ev(odd_visitante, odd_calculada_fora):.2f}%)",
         f"({calcular_percentual_ev(odd_dnb_casa, odd_calculada_dnb):.2f}%)",
